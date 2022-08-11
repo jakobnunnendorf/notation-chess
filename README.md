@@ -1,7 +1,7 @@
 # notation-chess
 A chess web app that allows two players to input their moves using chess notation and play a standard game of chess against each other.
 
-# Features
+## Features
 v1.0: Simple PvP pawn chess using chess notation input
 v1.1 Add a timer
 v1.2 Track piece values
