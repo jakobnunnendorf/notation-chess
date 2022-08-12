@@ -16,7 +16,7 @@ export class Board extends Component {
             guidingCols.push(<div className="square">{alphabet[i]}</div>)
         }
 
-        let toggle_BLack_White = 2;
+        let toggle_BLack_White = 3;
         const squares = [];
         for(let i=0; i<8; i++){
             for(let j=0; j<8; j++){
