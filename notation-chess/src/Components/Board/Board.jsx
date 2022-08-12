@@ -4,7 +4,8 @@ import './board.css';
 export class Board extends Component {
     render() {
         return (
-        <div>Board</div>
+        <div className='board'>
+            Board</div>
         )
     }
 }
