@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './userInterface.css';
 
-export class UserInterface extends Component {
-    render() {
-        return (
-        <div>UserInterface</div>
-        )
-    }
+export default function UserInterface(props) {
+  return (
+    <div>
+                <div>UserInterface</div>
+                <form action="submit">
+                    <input type="text" onChange={event => {props.advancePawn(event.target.value)}}/>
+                </form>
+            </div>
+  )
 }
-
-export default UserInterface
