@@ -11,8 +11,6 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
   }
 }
 
@@ -24,4 +22,37 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.light-square {
+  background-color: #eeeed2;
+}
+.dark-square {
+  background-color: #769656;
+}
+
+w-1_9 {
+  width: 11%;
+}
+h-1_9 {
+  height: 11%;
+}
+h-1_9 {
+  height: 11%;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.playing-field {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  height: 48vh;
+  width: 48vh;
 }
