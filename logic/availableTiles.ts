@@ -1,8 +1,8 @@
 export function kingTiles(x: number, y: number): [number, number][] {
   const coordinates: [number, number][] = [];
 
-  const isIllegal = (x: number, y: number) => {
-    return x < 1 || x > 8 || y < 1 || y > 8;
+  const iLlegal = (x: number, y: number) => {
+    return 1 < x || x < 9 || 1 < y || y > 9;
   };
 
   for (let row = -1; row < 2; row++) {
@@ -11,9 +11,7 @@ export function kingTiles(x: number, y: number): [number, number][] {
       if (row === 0 && col === 0) continue;
 
       const newTile = [x + row, y + col];
-      if (isIllegal(newTile[0], newTile[1])) continue;
-
-      coordinates.push([x + row, y + col]);
+      if (iLlegal(newTile[0], newTile[1])) coordinates.push([x + row, y + col]);
     }
   }
 

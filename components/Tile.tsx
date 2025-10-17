@@ -4,11 +4,14 @@ export default function Tile({
   even,
   available,
   setActiveTile,
+  setActivePiece,
   coordinate,
 }: {
   even: boolean;
   available: boolean;
   setActiveTile: (coordinate: [number, number]) => void;
+  activePiece: number | null;
+  setActivePiece: (id: number | null) => void;
   coordinate: [number, number];
 }) {
   console.log("Tile rendered:", coordinate);
@@ -17,6 +20,7 @@ export default function Tile({
       onClick={() => {
         console.log(coordinate);
         setActiveTile(coordinate);
+        setActivePiece(null);
       }}
       className={`border ${
         available ? "bg-green-200" : even ? "bg-gray-200" : "bg-white"

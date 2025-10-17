@@ -62,6 +62,8 @@ export default function Board() {
               key={`${y + 1}-${x + 1}`}
               even={(y + x) % 2 == 1}
               setActiveTile={setActiveTile}
+              activePiece={activePiece}
+              setActivePiece={setActivePiece}
               coordinate={[x + 1, y + 1]}
               available={availableTiles.some(
                 (tile) => tile[1] === y + 1 && tile[0] === x + 1

@@ -23,8 +23,8 @@ export default class Piece extends Component<PieceProps, PieceState> {
     super(props);
     this.state = {
       alive: true,
-      x: 1,
-      y: 4,
+      x: 4,
+      y: 8,
     };
   }
 
@@ -37,24 +37,14 @@ export default class Piece extends Component<PieceProps, PieceState> {
     // and the selected activeTile is not the one this piece is standing on,
     // update the state to the selcetd tile,
     // thereby moving the piece to a different row or column
-    console.log(prevProps);
-    console.log(this.props);
-    console.log(prevState);
-    console.log(this.state);
-    console.log(this.props.activePiece === this.props.id);
-    console.log(
-      prevProps.activeTile &&
-        this.props.activeTile &&
-        (prevProps.activeTile[0] !== this.props.activeTile[0] ||
-          prevProps.activeTile[1] !== this.props.activeTile[1])
-    );
+    console.log({ prevProps: prevProps, thisProps: this.props, prevState });
     if (
       prevProps.activePiece === this.props.id &&
-      prevProps.activeTile &&
       this.props.activeTile &&
-      (prevProps.activeTile![0] !== this.props.activeTile[0] ||
-        prevProps.activeTile![1] !== this.props.activeTile[1])
+      (this.props.activeTile[0] !== this.state.x ||
+        this.props.activeTile[1] !== this.state.y)
     ) {
+      console.log("Move tile");
       this.setState({
         x: this.props.activeTile[0],
         y: this.props.activeTile[1],
@@ -65,14 +55,17 @@ export default class Piece extends Component<PieceProps, PieceState> {
     }
   }
   render() {
-    console.log("Hello world!");
+    const toggleActivPiece = () => {
+      this.props.setActivePiece(this.props.activePiece ? null : this.props.id);
+    };
+
     return (
       <button
         onClick={() => {
           this.props.toggleAvailableTiles(
             kingTiles(this.state.x, this.state.y)
           );
-          this.props.setActivePiece(this.props.id);
+          toggleActivPiece();
         }}
         className="absolute flex items-center justify-center w-12 h-12 "
         style={{
