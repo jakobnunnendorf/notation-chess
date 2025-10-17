@@ -14,11 +14,9 @@ export default function Tile({
   setActivePiece: (id: number | null) => void;
   coordinate: [number, number];
 }) {
-  console.log("Tile rendered:", coordinate);
   return (
     <button
       onClick={() => {
-        console.log(coordinate);
         setActiveTile(coordinate);
         setActivePiece(null);
       }}

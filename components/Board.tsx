@@ -12,43 +12,19 @@ export default function Board() {
   const [activePiece, setActivePiece] = useState<number | null>(null);
   const tiles = Array(8).fill(Array(8).fill(null));
 
-  // Log when activePiece changes
-  useEffect(() => {
-    console.log("activePiece changed to:", activePiece);
-  }, [activePiece]);
-
-  // Log when activeTile changes
-  useEffect(() => {
-    console.log("activeTile changed to:", activeTile);
-  }, [activeTile]);
-
-  const toggleAvailableTiles = (tiles: [number, number][]) => {
-    console.log("toggleAvailableTiles called with:", tiles);
-    if (availableTiles.length > 0) {
-      console.log("Clearing available tiles");
-      setAvailableTiles([]);
-    } else {
-      console.log("Setting available tiles:", tiles);
-      setAvailableTiles(tiles);
-    }
-  };
+  const toggleAvailableTiles = (tiles: [number, number][]) =>
+    setAvailableTiles(availableTiles.length > 0 ? [] : tiles);
 
   const setActiveTile = (coordinate: [number, number]) => {
-    console.log("setActiveTile called with:", coordinate);
-    console.log("availableTiles:", availableTiles);
-    console.log("activePiece before:", activePiece);
-
     // Only move the piece if this tile is available for the active piece
     if (
       availableTiles.some(
         (tile) => tile[0] === coordinate[0] && tile[1] === coordinate[1]
       )
     ) {
-      console.log("Moving to available tile:", coordinate);
       setActiveTileState(coordinate);
     } else {
       // Clear selection when clicking non-available tiles
-      console.log("Clearing selection");
       setAvailableTiles([]);
       setActivePiece(null);
     }

@@ -17,5 +17,3 @@ export function kingTiles(x: number, y: number): [number, number][] {
 
   return coordinates;
 }
-
-console.log(kingTiles(1, 1));
