@@ -11,9 +11,13 @@ export default function Tile({
   setActiveTile: (coordinate: [number, number]) => void;
   coordinate: [number, number];
 }) {
+  console.log("Tile rendered:", coordinate);
   return (
     <button
-      onClick={() => setActiveTile(coordinate)}
+      onClick={() => {
+        console.log(coordinate);
+        setActiveTile(coordinate);
+      }}
       className={`border ${
         available ? "bg-green-200" : even ? "bg-gray-200" : "bg-white"
       } h-12 w-12`}
