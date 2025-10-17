@@ -16,7 +16,7 @@ export default function Board() {
     // Only move the piece if this tile is available for the active piece
     if (
       availableTiles.some(
-        (tile) => tile[0] === coordinate[1] && tile[1] === coordinate[0]
+        (tile) => tile[0] === coordinate[0] && tile[1] === coordinate[1]
       )
     ) {
       setActiveTileState(coordinate);
@@ -45,7 +45,7 @@ export default function Board() {
               setActiveTile={setActiveTile}
               coordinate={[row + 1, col + 1]}
               available={availableTiles.some(
-                (tile) => tile[1] === row + 1 && tile[0] === col + 1
+                (tile) => tile[0] === row + 1 && tile[1] === col + 1
               )}
             />
           ));
