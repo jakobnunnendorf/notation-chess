@@ -1,3 +1,20 @@
+export function pawnTiles(
+  x: number,
+  y: number,
+  colour: string
+): [number, number][] {
+  const firstTile: [number, number] = [x, colour === "white" ? y + 1 : y - 1];
+  const tiles = [firstTile];
+  if ((colour === "white" && y === 2) || (colour === "black" && y === 7)) {
+    const secondTile: [number, number] = [
+      x,
+      colour === "white" ? y + 2 : y - 2,
+    ];
+    tiles.push(secondTile);
+  }
+  return tiles;
+}
+
 export function kingTiles(x: number, y: number): [number, number][] {
   const coordinates: [number, number][] = [];
 

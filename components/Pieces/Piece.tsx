@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Component } from "react";
-import { kingTiles } from "@/logic/availableTiles";
+import { kingTiles, pawnTiles } from "@/logic/availableTiles";
 
 interface PieceProps {
   id: number;
@@ -10,6 +10,7 @@ interface PieceProps {
   activeTile: [number, number] | null;
   activePiece: number | null;
   setActivePiece: (piece: number | null) => void;
+  coordinate: [number, number];
 }
 
 interface PieceState {
@@ -23,13 +24,20 @@ export default class Piece extends Component<PieceProps, PieceState> {
     super(props);
     this.state = {
       alive: true,
-      x: 4,
-      y: 8,
+      x: props.coordinate[0],
+      y: props.coordinate[1],
     };
   }
 
+  toggleAvailableTilesForThisPiece = (x: number, y: number) => {
+    if (this.props.type === "pawn") {
+      this.props.toggleAvailableTiles(pawnTiles(x, y, this.props.color));
+    } else if (this.props.type === "king")
+      this.props.toggleAvailableTiles(kingTiles(x, y));
+  };
+
   componentDidUpdate(prevProps: Readonly<PieceProps>): void {
-    // If this piece is active and the selected activeTile is not 
+    // If this piece is active and the selected activeTile is not
     // the one this piece is standing on,
     // update the state to the selcetd tile,
     // thereby moving the piece to a different row and/or column
@@ -43,8 +51,9 @@ export default class Piece extends Component<PieceProps, PieceState> {
         x: this.props.activeTile[0],
         y: this.props.activeTile[1],
       });
-      this.props.toggleAvailableTiles(
-        kingTiles(this.props.activeTile[0], this.props.activeTile[1])
+      this.toggleAvailableTilesForThisPiece(
+        this.props.activeTile[0],
+        this.props.activeTile[1]
       );
     }
   }
@@ -56,9 +65,7 @@ export default class Piece extends Component<PieceProps, PieceState> {
     return (
       <button
         onClick={() => {
-          this.props.toggleAvailableTiles(
-            kingTiles(this.state.x, this.state.y)
-          );
+          this.toggleAvailableTilesForThisPiece(this.state.x, this.state.y);
           toggleActivPiece();
         }}
         className="absolute flex items-center justify-center w-12 h-12 "
