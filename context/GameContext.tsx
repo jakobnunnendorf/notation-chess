@@ -40,6 +40,10 @@ export default function GameContextProvider({
     setOccupiedSquares(initialOccupiedSquares);
   }, []);
 
+  useEffect(() => {
+    if (activePiece === null) setAvailableTiles([]);
+  }, [activePiece]);
+
   const value: GameContextType = {
     occupiedSquares,
     setOccupiedSquares,

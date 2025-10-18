@@ -22,6 +22,7 @@ export default function Piece({
     activeTile,
     availableTiles,
     setAvailableTiles,
+    setActiveTile,
   } = useGame();
 
   useEffect(() => {
@@ -36,8 +37,9 @@ export default function Piece({
       setCoordinate(activeTile);
       setAvailableTiles([]);
       setActivePiece(null);
+      setActiveTile(null);
     }
-  }, [activePiece, activeTile]);
+  }, [activeTile]);
 
   return (
     <button

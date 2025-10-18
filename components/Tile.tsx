@@ -21,7 +21,12 @@ export default function Tile({
   return (
     <button
       onClick={() => {
-        setActiveTile(activeTile ? null : coordinate);
+        if (available) {
+          setActiveTile(activeTile ? null : coordinate);
+        } else {
+          setActivePiece(null);
+          setActiveTile(null);
+        }
       }}
       className={`border ${
         available ? "bg-green-200" : even ? "bg-gray-200" : "bg-white"
