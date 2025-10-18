@@ -54,7 +54,7 @@ export function getAvailableTiles(
       tiles = kingTiles(coord);
       break;
     case "rook":
-      tiles = rookTiles(coord);
+      tiles = rookTiles(coord, colour, occupiedSquares);
       break;
     case "bishop":
       tiles = bishopTiles(coord, colour, occupiedSquares);
@@ -123,20 +123,43 @@ export function pawnTiles(
   return tiles.filter((tile) => onBoard(tile));
 }
 
-export function rookTiles([x, y]: Coord): Coord[] {
+export function rookTiles(
+  [x, y]: Coord,
+  colour: string,
+  occupiedSquares: OccupiedSquare[]
+): Coord[] {
   const coordinates: Coord[] = [];
-
-  for (let col = 1; col < 9; col++) {
-    // Skip the current position
-    if (col === x) continue;
-    const newTile: Coord = [col, y];
-    if (onBoard(newTile)) coordinates.push(newTile);
+  if (x < 8) {
+    for (let col = x + 1; col < 9; col++) {
+      const newCoordinate: Coord = [col, y];
+      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      coordinates.push(newCoordinate);
+      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+    }
   }
-  for (let row = 1; row < 9; row++) {
-    // Skip the current position
-    if (row === y) continue;
-    const newTile: Coord = [x, row];
-    if (onBoard(newTile)) coordinates.push(newTile);
+  if (1 < x) {
+    for (let col = x - 1; 0 < col; col--) {
+      const newCoordinate: Coord = [col, y];
+      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      coordinates.push(newCoordinate);
+      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+    }
+  }
+  if (y < 8) {
+    for (let row = y + 1; row < 9; row++) {
+      const newCoordinate: Coord = [x, row];
+      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      coordinates.push(newCoordinate);
+      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+    }
+  }
+  if (1 < y) {
+    for (let row = y - 1; 0 < row; row--) {
+      const newCoordinate: Coord = [x, row];
+      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      coordinates.push(newCoordinate);
+      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+    }
   }
 
   return coordinates;
@@ -214,7 +237,7 @@ export function queenTiles(
   occupiedSquares: OccupiedSquare[]
 ): Coord[] {
   const coordinates: Coord[] = [];
-  coordinates.push(...rookTiles([x, y]));
+  coordinates.push(...rookTiles([x, y], colour, occupiedSquares));
   coordinates.push(...bishopTiles([x, y], colour, occupiedSquares));
   return coordinates;
 }
