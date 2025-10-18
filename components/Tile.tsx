@@ -1,5 +1,9 @@
 import { useGame } from "@/context/GameContext";
-import { findOccupier } from "@/logic/squareInfo";
+import {
+  findOccupier,
+  isTileAvailable,
+  tileIsOccupiedByEnemy,
+} from "@/logic/squareInfo";
 import React, { useState, useEffect } from "react";
 
 export default function Tile({
@@ -21,27 +25,19 @@ export default function Tile({
   const [occupiedByEnemy, setOccupiedByEnemy] = useState(false);
 
   useEffect(() => {
-    const available = availableTiles.some(
-      (tile) => tile[0] === coordinate[0] && tile[1] === coordinate[1]
-    );
-    setAvailable(available);
+    const tileIsAvailable = isTileAvailable(availableTiles, coordinate);
+    setAvailable(isTileAvailable(availableTiles, coordinate));
+    if (!tileIsAvailable) return;
 
     const occupier = findOccupier(occupiedSquares, coordinate);
-    if (!occupier || !available) return;
-    const occupierIsEnemy =
-      occupier && activePiece && occupier?.colour !== activePiece?.colour;
-    setOccupiedByEnemy(Boolean(occupier && occupierIsEnemy));
+    setOccupiedByEnemy(tileIsOccupiedByEnemy(occupier, activePiece));
   }, [availableTiles, occupiedSquares, activePiece, coordinate]);
 
   return (
     <button
       onClick={() => {
-        if (available) {
-          setActiveTile(activeTile ? null : coordinate);
-        } else {
-          setActivePiece(null);
-          setActiveTile(null);
-        }
+        setActiveTile(activeTile || !available ? null : coordinate);
+        if (!available) setActivePiece(null);
       }}
       className={`border ${
         occupiedByEnemy
