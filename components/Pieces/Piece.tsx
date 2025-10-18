@@ -23,27 +23,27 @@ export default function Piece({
     setActivePiece,
     availableTiles,
     setAvailableTiles,
-    occupiedSquares,
+    piecesMetaData,
     setPiecesMetaData,
   } = useGame();
 
   useEffect(() => {
-    const occupiedSquare = occupiedSquares.find((square) => square.id === id);
+    const occupiedSquare = piecesMetaData.find((square) => square.id === id);
     if (!occupiedSquare) setAlive(false);
     else setAlive(true);
     if (occupiedSquare && occupiedSquare.coord !== coordinate)
       setCoordinate(occupiedSquare.coord);
-  }, [occupiedSquares]);
+  }, [piecesMetaData]);
 
   return alive ? (
     <button
       onClick={() => {
-        const occupier = findOccupier(occupiedSquares, coordinate);
+        const occupier = findOccupier(piecesMetaData, coordinate);
         if (activePiece && occupier && activePiece.id! !== occupier.id) {
           setPiecesMetaData(
             movePiece(
               pieceType,
-              occupiedSquares,
+              piecesMetaData,
               activePiece.id,
               coordinate,
               colour
@@ -51,7 +51,7 @@ export default function Piece({
           );
         } else if (availableTiles.length === 0) {
           const tiles: Coord[] = getAvailableTiles(
-            occupiedSquares,
+            piecesMetaData,
             coordinate,
             pieceType,
             colour

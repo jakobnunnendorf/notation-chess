@@ -4,7 +4,7 @@ import React, { useState, createContext, useContext, useEffect } from "react";
 import { pieces } from "@/settings";
 
 interface GameContextType {
-  occupiedSquares: PieceMetaData[];
+  piecesMetaData: PieceMetaData[];
   setPiecesMetaData: React.Dispatch<React.SetStateAction<PieceMetaData[]>>;
   activePiece: PieceMetaData | null;
   setActivePiece: React.Dispatch<React.SetStateAction<PieceMetaData | null>>;
@@ -26,7 +26,7 @@ export default function GameContextProvider({
   const [availableTiles, setAvailableTiles] = useState<Coord[]>([]);
   const [activeTile, setActiveTile] = useState<Coord | null>(null);
   const [activePiece, setActivePiece] = useState<PieceMetaData | null>(null);
-  const [occupiedSquares, setPiecesMetaData] = useState<PieceMetaData[]>([]);
+  const [piecesMetaData, setPiecesMetaData] = useState<PieceMetaData[]>([]);
 
   useEffect(() => {
     const initialPiecesMetaData = pieces.map((piece: PieceMetaData) => {
@@ -46,7 +46,7 @@ export default function GameContextProvider({
   }, [activePiece]);
 
   const value: GameContextType = {
-    occupiedSquares,
+    piecesMetaData,
     setPiecesMetaData,
     activePiece,
     setActivePiece,

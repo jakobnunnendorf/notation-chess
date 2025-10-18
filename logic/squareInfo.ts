@@ -1,8 +1,8 @@
 export function findOccupier(
-  occupiedSquares: PieceMetaData[],
+  piecesMetaData: PieceMetaData[],
   coordinate: Coord
 ): PieceMetaData | undefined {
-  const occupier = occupiedSquares.find(
+  const occupier = piecesMetaData.find(
     (square) =>
       square.coord[0] === coordinate[0] && square.coord[1] === coordinate[1]
   );

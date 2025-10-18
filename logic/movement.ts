@@ -3,13 +3,13 @@ import { findOccupier } from "./squareInfo";
 
 export function movePiece(
   pieceType: string,
-  occupiedSquares: PieceMetaData[],
+  piecesMetaData: PieceMetaData[],
   id: number,
   newTile: Coord,
   colour: string
 ): PieceMetaData[] {
   return [
-    ...occupiedSquares.filter(
+    ...piecesMetaData.filter(
       (square) =>
         !(square.coord[0] === newTile[0] && square.coord[1] === newTile[1]) &&
         square.id !== id
@@ -23,7 +23,7 @@ const onBoard = ([x, y]: Coord) => {
 };
 
 export function getAvailableTiles(
-  occupiedSquares: PieceMetaData[],
+  piecesMetaData: PieceMetaData[],
   coord: Coord,
   pieceType: string,
   colour: string
@@ -32,29 +32,29 @@ export function getAvailableTiles(
   switch (pieceType) {
     case "pawn":
       assert(colour !== undefined);
-      tiles = pawnTiles(coord, colour, occupiedSquares);
+      tiles = pawnTiles(coord, colour, piecesMetaData);
       break;
     case "king":
       tiles = kingTiles(coord);
       break;
     case "rook":
-      tiles = rookTiles(coord, colour, occupiedSquares);
+      tiles = rookTiles(coord, colour, piecesMetaData);
       break;
     case "bishop":
-      tiles = bishopTiles(coord, colour, occupiedSquares);
+      tiles = bishopTiles(coord, colour, piecesMetaData);
       break;
     case "knight":
       tiles = knightTiles(coord);
       break;
     case "queen":
-      tiles = queenTiles(coord, colour, occupiedSquares);
+      tiles = queenTiles(coord, colour, piecesMetaData);
       break;
     default:
       tiles = [];
   }
   return tiles.filter(
     (tile) =>
-      !occupiedSquares.some(
+      !piecesMetaData.some(
         (occupied) =>
           occupied.coord[0] === tile[0] &&
           occupied.coord[1] === tile[1] &&
@@ -64,20 +64,20 @@ export function getAvailableTiles(
 }
 
 const hasEnemyPiece = (
-  occupiedSquares: PieceMetaData[],
+  piecesMetaData: PieceMetaData[],
   [x, y]: Coord,
   colour: string
 ) => {
-  const occupier = findOccupier(occupiedSquares, [x, y]);
+  const occupier = findOccupier(piecesMetaData, [x, y]);
   if (!occupier) return false;
   return occupier.colour !== colour;
 };
 const hasFriend = (
-  occupiedSquares: PieceMetaData[],
+  piecesMetaData: PieceMetaData[],
   [x, y]: Coord,
   colour: string
 ) => {
-  const occupier = findOccupier(occupiedSquares, [x, y]);
+  const occupier = findOccupier(piecesMetaData, [x, y]);
   if (!occupier) return false;
   return occupier.colour === colour;
 };
@@ -85,23 +85,22 @@ const hasFriend = (
 export function pawnTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: PieceMetaData[]
+  piecesMetaData: PieceMetaData[]
 ): Coord[] {
   const firstTile: Coord = [x, colour === "white" ? y + 1 : y - 1];
   const tiles: Coord[] = [];
 
-  if (!hasEnemyPiece(occupiedSquares, firstTile, colour)) tiles.push(firstTile);
+  if (!hasEnemyPiece(piecesMetaData, firstTile, colour)) tiles.push(firstTile);
   if ((colour === "white" && y === 2) || (colour === "black" && y === 7)) {
     const secondTile: Coord = [x, colour === "white" ? y + 2 : y - 2];
-    if (!hasEnemyPiece(occupiedSquares, firstTile, colour))
+    if (!hasEnemyPiece(piecesMetaData, firstTile, colour))
       tiles.push(secondTile);
   }
 
   const leftAttack: Coord = [x - 1, colour === "white" ? y + 1 : y - 1];
   const rightAttack: Coord = [x + 1, colour === "white" ? y + 1 : y - 1];
-  if (hasEnemyPiece(occupiedSquares, leftAttack, colour))
-    tiles.push(leftAttack);
-  if (hasEnemyPiece(occupiedSquares, rightAttack, colour))
+  if (hasEnemyPiece(piecesMetaData, leftAttack, colour)) tiles.push(leftAttack);
+  if (hasEnemyPiece(piecesMetaData, rightAttack, colour))
     tiles.push(rightAttack);
 
   return tiles.filter((tile) => onBoard(tile));
@@ -110,39 +109,39 @@ export function pawnTiles(
 export function rookTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: PieceMetaData[]
+  piecesMetaData: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
   if (x < 8) {
     for (let col = x + 1; col < 9; col++) {
       const newCoordinate: Coord = [col, y];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
   }
   if (1 < x) {
     for (let col = x - 1; 0 < col; col--) {
       const newCoordinate: Coord = [col, y];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
   }
   if (y < 8) {
     for (let row = y + 1; row < 9; row++) {
       const newCoordinate: Coord = [x, row];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
   }
   if (1 < y) {
     for (let row = y - 1; 0 < row; row--) {
       const newCoordinate: Coord = [x, row];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
   }
 
@@ -152,7 +151,7 @@ export function rookTiles(
 export function bishopTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: PieceMetaData[]
+  piecesMetaData: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
 
@@ -161,15 +160,15 @@ export function bishopTiles(
     const yShift = y - x * slope;
     for (let col = x + 1; col < 9; col++) {
       const newCoordinate: Coord = [col, slope * col + yShift];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       if (onBoard(newCoordinate)) coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
     for (let col = x - 1; 0 < col; col--) {
       const newCoordinate: Coord = [col, slope * col + yShift];
-      if (hasFriend(occupiedSquares, newCoordinate, colour)) break;
+      if (hasFriend(piecesMetaData, newCoordinate, colour)) break;
       if (onBoard(newCoordinate)) coordinates.push(newCoordinate);
-      if (hasEnemyPiece(occupiedSquares, newCoordinate, colour)) break;
+      if (hasEnemyPiece(piecesMetaData, newCoordinate, colour)) break;
     }
   });
 
@@ -218,10 +217,10 @@ export function kingTiles([x, y]: Coord): Coord[] {
 export function queenTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: PieceMetaData[]
+  piecesMetaData: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
-  coordinates.push(...rookTiles([x, y], colour, occupiedSquares));
-  coordinates.push(...bishopTiles([x, y], colour, occupiedSquares));
+  coordinates.push(...rookTiles([x, y], colour, piecesMetaData));
+  coordinates.push(...bishopTiles([x, y], colour, piecesMetaData));
   return coordinates;
 }

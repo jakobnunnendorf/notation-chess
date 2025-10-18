@@ -19,7 +19,7 @@ export default function Tile({
     setActivePiece,
     availableTiles,
     activeTile,
-    occupiedSquares,
+    piecesMetaData,
     setPiecesMetaData,
     activePiece,
     setAvailableTiles,
@@ -32,9 +32,9 @@ export default function Tile({
     setAvailable(isTileAvailable(availableTiles, coordinate));
     if (!tileIsAvailable) return;
 
-    const occupier = findOccupier(occupiedSquares, coordinate);
+    const occupier = findOccupier(piecesMetaData, coordinate);
     setOccupiedByEnemy(tileIsOccupiedByEnemy(occupier, activePiece));
-  }, [availableTiles, occupiedSquares, activePiece, coordinate]);
+  }, [availableTiles, piecesMetaData, activePiece, coordinate]);
 
   return (
     <button
@@ -43,7 +43,7 @@ export default function Tile({
           setPiecesMetaData(
             movePiece(
               activePiece.pieceType,
-              occupiedSquares,
+              piecesMetaData,
               activePiece.id,
               coordinate,
               activePiece.colour

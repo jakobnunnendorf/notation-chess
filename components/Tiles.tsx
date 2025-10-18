@@ -4,7 +4,7 @@ import Tile from "./Tile";
 export default function Tiles() {
   const tiles = Array(8).fill(Array(8).fill(null));
   return (
-    <div className="absolute grid w-full h-full grid-cols-8 border grid-rows-8">
+    <div className="absolute grid w-full h-full grid-cols-8 grid-rows-8">
       {tiles.map((_, y) => {
         return tiles.map((_, x) => (
           <Tile
