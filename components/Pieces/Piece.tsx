@@ -15,6 +15,7 @@ export default function Piece({
   initialCoordinate: [number, number];
 }) {
   const [coordinate, setCoordinate] = useState<Coord>(initialCoordinate);
+  const [alive, setAlive] = useState(true);
 
   const {
     activePiece,
@@ -47,9 +48,28 @@ export default function Piece({
     }
   }, [activeTile]);
 
-  return (
+  useEffect(() => {
+    const occupiedSquare = occupiedSquares.find((square) => square.id === id);
+    if (!occupiedSquare) setAlive(false);
+    else {
+      setAlive(true);
+      setCoordinate(occupiedSquare.coord);
+    }
+  }, [occupiedSquares]);
+
+  return alive ? (
     <button
       onClick={() => {
+        const occupier = occupiedSquares.find(
+          (square) =>
+            square.coord[0] === coordinate[0] &&
+            square.coord[1] === coordinate[1]
+        );
+        if (activePiece && occupier && activePiece?.id! !== occupier?.id) {
+          setOccupiedSquares(
+            occupiedSquares.filter((square) => square.id !== occupier?.id)
+          );
+        }
         if (availableTiles.length === 0) {
           const tiles: Coord[] = getAvailableTiles(
             occupiedSquares,
@@ -74,5 +94,5 @@ export default function Piece({
         height={25}
       />
     </button>
-  );
+  ) : null;
 }
