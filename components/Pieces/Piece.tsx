@@ -23,6 +23,8 @@ export default function Piece({
     availableTiles,
     setAvailableTiles,
     setActiveTile,
+    occupiedSquares,
+    setOccupiedSquares,
   } = useGame();
 
   useEffect(() => {
@@ -35,6 +37,10 @@ export default function Piece({
       (activeTile[0] !== coordinate[0] || activeTile[1] !== coordinate[1])
     ) {
       setCoordinate(activeTile);
+      setOccupiedSquares((prev) => {
+        const filtered = prev.filter((square) => square.id !== id);
+        return [...filtered, { id, coord: activeTile, colour, pieceType }];
+      });
       setAvailableTiles([]);
       setActivePiece(null);
       setActiveTile(null);
@@ -46,9 +52,10 @@ export default function Piece({
       onClick={() => {
         if (availableTiles.length === 0) {
           const tiles: Coord[] = getAvailableTiles(
+            occupiedSquares,
             coordinate,
             pieceType,
-            pieceType === "pawn" ? colour : undefined
+            colour
           );
           setAvailableTiles(tiles);
         } else setAvailableTiles([]);

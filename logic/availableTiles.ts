@@ -5,9 +5,10 @@ const onBoard = ([x, y]: Coord) => {
 };
 
 export function getAvailableTiles(
+  occupiedSquares: OccupiedSquare[],
   coord: Coord,
   pieceType: string,
-  colour?: string
+  colour: string
 ): Coord[] {
   let tiles: Coord[];
   switch (pieceType) {
@@ -33,7 +34,15 @@ export function getAvailableTiles(
     default:
       tiles = [];
   }
-  return tiles;
+  return tiles.filter(
+    (tile) =>
+      !occupiedSquares.some(
+        (occupied) =>
+          occupied.coord[0] === tile[0] &&
+          occupied.coord[1] === tile[1] &&
+          occupied.colour === colour
+      )
+  );
 }
 
 export function pawnTiles([x, y]: Coord, colour: string): Coord[] {
