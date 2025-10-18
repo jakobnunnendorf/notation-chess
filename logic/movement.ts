@@ -78,33 +78,38 @@ export function getAvailableTiles(
   );
 }
 
+const hasEnemyPiece = (
+  occupiedSquares: OccupiedSquare[],
+  [x, y]: Coord,
+  colour: string
+) => {
+  return occupiedSquares.some(
+    (square) =>
+      square.coord[0] === x && square.coord[1] === y && square.colour !== colour
+  );
+};
+
 export function pawnTiles(
   [x, y]: Coord,
   colour: string,
   occupiedSquares: OccupiedSquare[]
 ): Coord[] {
-  const hasEnemyPiece = ([x, y]: [number, number]) => {
-    return occupiedSquares.some(
-      (square) =>
-        square.coord[0] === x &&
-        square.coord[1] === y &&
-        square.colour !== colour
-    );
-  };
-
   const firstTile: Coord = [x, colour === "white" ? y + 1 : y - 1];
   const tiles: Coord[] = [];
 
-  if (!hasEnemyPiece(firstTile)) tiles.push(firstTile);
+  if (!hasEnemyPiece(occupiedSquares, firstTile, colour)) tiles.push(firstTile);
   if ((colour === "white" && y === 2) || (colour === "black" && y === 7)) {
     const secondTile: Coord = [x, colour === "white" ? y + 2 : y - 2];
-    if (!hasEnemyPiece(firstTile)) tiles.push(secondTile);
+    if (!hasEnemyPiece(occupiedSquares, firstTile, colour))
+      tiles.push(secondTile);
   }
 
   const leftAttack: Coord = [x - 1, colour === "white" ? y + 1 : y - 1];
   const rightAttack: Coord = [x + 1, colour === "white" ? y + 1 : y - 1];
-  if (hasEnemyPiece(leftAttack)) tiles.push(leftAttack);
-  if (hasEnemyPiece(rightAttack)) tiles.push(rightAttack);
+  if (hasEnemyPiece(occupiedSquares, leftAttack, colour))
+    tiles.push(leftAttack);
+  if (hasEnemyPiece(occupiedSquares, rightAttack, colour))
+    tiles.push(rightAttack);
 
   return tiles.filter((tile) => onBoard(tile));
 }
