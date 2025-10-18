@@ -29,6 +29,47 @@ export default function Board() {
       setActivePiece(null);
     }
   };
+  const colours = ["black", "white"];
+  const initialPieceColumns = {
+    king: { col: [4], row: 1 },
+    queen: { col: [5], row: 1 },
+    bishop: { col: [3, 6], row: 1 },
+    knight: { col: [2, 7], row: 1 },
+    rook: { col: [1, 8], row: 1 },
+    pawn: { col: [1, 2, 3, 4, 5, 6, 7, 8], row: 2 },
+  };
+  const pieces: JSX.Element[] = [];
+  colours.forEach((colour) => {
+    Object.keys(initialPieceColumns).forEach((piece) => {
+      initialPieceColumns[
+        piece as keyof typeof initialPieceColumns
+      ].col.forEach((col) => {
+        const startingRow = colour === "white" ? 1 : 8;
+        const row =
+          piece === "pawn"
+            ? colour === "white"
+              ? startingRow + 1
+              : startingRow - 1
+            : startingRow;
+        pieces.push(
+          <Piece
+            key={`${colour}-${piece}-${col}`}
+            type={piece}
+            color={colour}
+            id={pieces.length + 1}
+            toggleAvailableTiles={toggleAvailableTiles}
+            activeTile={activeTile}
+            activePiece={activePiece}
+            setActivePiece={setActivePiece}
+            coordinate={[col, row]}
+          />
+        );
+      });
+      return;
+    });
+    return;
+  });
+
   return (
     <div className="relative grid grid-cols-8 border h-96 w-96 grid-rows-8">
       <div className="absolute grid w-full h-full grid-cols-8 border grid-rows-8">
@@ -48,15 +89,7 @@ export default function Board() {
           ));
         })}
       </div>
-      <Piece
-        type="King"
-        color="black"
-        id={1}
-        toggleAvailableTiles={toggleAvailableTiles}
-        activeTile={activeTile}
-        activePiece={activePiece}
-        setActivePiece={setActivePiece}
-      />
+      {pieces.map((piece) => piece)}
     </div>
   );
 }
