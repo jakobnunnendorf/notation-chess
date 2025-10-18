@@ -1,10 +1,6 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import {
-  getAvailableTiles,
-  movePiece,
-  shouldThisPieceMove,
-} from "@/logic/movement";
+import { getAvailableTiles, movePiece } from "@/logic/movement";
 import { useGame } from "@/context/GameContext";
 import { findOccupier } from "@/logic/squareInfo";
 
