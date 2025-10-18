@@ -3,6 +3,7 @@ import { Component } from "react";
 import {
   bishopTiles,
   kingTiles,
+  knightTiles,
   pawnTiles,
   rookTiles,
 } from "@/logic/availableTiles";
@@ -43,6 +44,8 @@ export default class Piece extends Component<PieceProps, PieceState> {
       this.props.toggleAvailableTiles(rookTiles(coord));
     else if (this.props.type === "bishop")
       this.props.toggleAvailableTiles(bishopTiles(coord));
+    else if (this.props.type === "knight")
+      this.props.toggleAvailableTiles(knightTiles(coord));
   };
 
   componentDidUpdate(prevProps: Readonly<PieceProps>): void {

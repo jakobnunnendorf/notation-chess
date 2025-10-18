@@ -47,6 +47,25 @@ export function bishopTiles([x, y]: Coord): Coord[] {
   return coordinates;
 }
 
+export function knightTiles([x, y]: Coord): Coord[] {
+  const coordinates: Coord[] = [];
+  const dir: Coord[] = [
+    [2, 0],
+    [-2, 0],
+    [0, 2],
+    [0, -2],
+  ];
+  dir.forEach(([bx, by]: Coord) => {
+    const dx = bx === 0 ? 1 : 0;
+    const dy = by === 0 ? 1 : 0;
+    const first: Coord = [x + bx + dx, y + by + dy];
+    if (onBoard(first)) coordinates.push(first);
+    const second: Coord = [x + bx - dx, y + by - dy];
+    if (onBoard(second)) coordinates.push(second);
+  });
+  return coordinates;
+}
+
 export function kingTiles([x, y]: Coord): Coord[] {
   const coordinates: Coord[] = [];
 
