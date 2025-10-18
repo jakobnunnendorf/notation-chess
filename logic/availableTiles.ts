@@ -85,3 +85,10 @@ export function kingTiles([x, y]: Coord): Coord[] {
 
   return coordinates;
 }
+
+export function queenTiles([x, y]: Coord): Coord[] {
+  const coordinates: Coord[] = [];
+  coordinates.push(...rookTiles([x, y]));
+  coordinates.push(...bishopTiles([x, y]));
+  return coordinates;
+}

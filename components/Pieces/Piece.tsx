@@ -5,6 +5,7 @@ import {
   kingTiles,
   knightTiles,
   pawnTiles,
+  queenTiles,
   rookTiles,
 } from "@/logic/availableTiles";
 
@@ -46,6 +47,8 @@ export default class Piece extends Component<PieceProps, PieceState> {
       this.props.toggleAvailableTiles(bishopTiles(coord));
     else if (this.props.type === "knight")
       this.props.toggleAvailableTiles(knightTiles(coord));
+    else if (this.props.type === "queen")
+      this.props.toggleAvailableTiles(queenTiles(coord));
   };
 
   componentDidUpdate(prevProps: Readonly<PieceProps>): void {
