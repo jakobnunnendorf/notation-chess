@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { createContext } from "react";
+"use client";
+
+import React, { useState, createContext, useContext } from "react";
 
 interface GameContextType {
   occupiedSquares: OccupiedSquare[];
@@ -12,7 +13,9 @@ interface GameContextType {
   setAvailableTiles: React.Dispatch<React.SetStateAction<Coord[]>>;
 }
 
-export const GameContext = createContext<GameContextType| undefined>(undefined);
+export const GameContext = createContext<GameContextType | undefined>(
+  undefined
+);
 
 export default function GameContextProvider({
   children,
@@ -36,4 +39,10 @@ export default function GameContextProvider({
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+}
+
+export function useGame() {
+  const ctx = useContext(GameContext);
+  if (!ctx) throw new Error("useGame must be used within GameContextProvider");
+  return ctx;
 }
