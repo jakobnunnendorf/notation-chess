@@ -1,6 +1,10 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { getAvailableTiles } from "@/logic/movement";
+import {
+  getAvailableTiles,
+  movePiece,
+  shouldThisPieceMove,
+} from "@/logic/movement";
 import { useGame } from "@/context/GameContext";
 import { findOccupier } from "@/logic/squareInfo";
 
@@ -21,53 +25,29 @@ export default function Piece({
   const {
     activePiece,
     setActivePiece,
-    activeTile,
     availableTiles,
     setAvailableTiles,
-    setActiveTile,
     occupiedSquares,
     setOccupiedSquares,
   } = useGame();
 
   useEffect(() => {
-    if (
-      activePiece?.id === id &&
-      activeTile &&
-      availableTiles.some(
-        (tile) => tile[0] === activeTile[0] && tile[1] === activeTile[1]
-      ) &&
-      (activeTile[0] !== coordinate[0] || activeTile[1] !== coordinate[1])
-    ) {
-      setCoordinate(activeTile);
-      setOccupiedSquares((prev) => {
-        const filtered = prev.filter((square) => square.id !== id);
-        return [...filtered, { id, coord: activeTile, colour, pieceType }];
-      });
-      setAvailableTiles([]);
-      setActivePiece(null);
-      setActiveTile(null);
-    }
-  }, [activeTile]);
-
-  useEffect(() => {
     const occupiedSquare = occupiedSquares.find((square) => square.id === id);
     if (!occupiedSquare) setAlive(false);
-    else {
-      setAlive(true);
+    else setAlive(true);
+    if (occupiedSquare && occupiedSquare.coord !== coordinate)
       setCoordinate(occupiedSquare.coord);
-    }
   }, [occupiedSquares]);
 
   return alive ? (
     <button
       onClick={() => {
         const occupier = findOccupier(occupiedSquares, coordinate);
-        if (activePiece && occupier && activePiece?.id! !== occupier?.id) {
+        if (activePiece && occupier && activePiece.id! !== occupier.id) {
           setOccupiedSquares(
-            occupiedSquares.filter((square) => square.id !== occupier?.id)
+            movePiece(occupiedSquares, activePiece.id, coordinate, colour)
           );
-        }
-        if (availableTiles.length === 0) {
+        } else if (availableTiles.length === 0) {
           const tiles: Coord[] = getAvailableTiles(
             occupiedSquares,
             coordinate,

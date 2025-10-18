@@ -1,5 +1,38 @@
 import assert from "assert";
 
+export function shouldThisPieceMove(
+  activePiece: OccupiedSquare | null,
+  id: number,
+  activeTile: Coord | null,
+  availableTiles: Coord[],
+  coordinate: Coord
+): boolean {
+  if (!activeTile) return false;
+  return (
+    activePiece?.id === id &&
+    availableTiles.some(
+      (tile) => tile[0] === activeTile[0] && tile[1] === activeTile[1]
+    ) &&
+    (activeTile[0] !== coordinate[0] || activeTile[1] !== coordinate[1])
+  );
+}
+
+export function movePiece(
+  occupiedSquares: OccupiedSquare[],
+  id: number,
+  newTile: Coord,
+  colour: string
+): OccupiedSquare[] {
+  return [
+    ...occupiedSquares.filter(
+      (square) =>
+        !(square.coord[0] === newTile[0] && square.coord[1] === newTile[1]) &&
+        square.id !== id
+    ),
+    { id, coord: newTile, colour },
+  ];
+}
+
 const onBoard = ([x, y]: Coord) => {
   return 0 < x || x < 9 || 0 < y || 9 < y;
 };

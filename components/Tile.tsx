@@ -1,4 +1,5 @@
 import { useGame } from "@/context/GameContext";
+import { movePiece } from "@/logic/movement";
 import {
   findOccupier,
   isTileAvailable,
@@ -19,7 +20,9 @@ export default function Tile({
     availableTiles,
     activeTile,
     occupiedSquares,
+    setOccupiedSquares,
     activePiece,
+    setAvailableTiles,
   } = useGame();
   const [available, setAvailable] = useState<boolean>(false);
   const [occupiedByEnemy, setOccupiedByEnemy] = useState(false);
@@ -36,8 +39,18 @@ export default function Tile({
   return (
     <button
       onClick={() => {
-        setActiveTile(activeTile || !available ? null : coordinate);
-        if (!available) setActivePiece(null);
+        if (activePiece && available) {
+          setOccupiedSquares(
+            movePiece(
+              occupiedSquares,
+              activePiece.id,
+              coordinate,
+              activePiece.colour
+            )
+          );
+        }
+        setAvailableTiles([]);
+        setActivePiece(null);
       }}
       className={`border ${
         occupiedByEnemy
