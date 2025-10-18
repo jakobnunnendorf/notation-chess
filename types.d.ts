@@ -1,6 +1,6 @@
 type Coord = [number, number];
 interface PieceMetaData {
-  type: string;
+  pieceType: string;
   colour: string;
   id: number;
   initialCoord: Coord;
