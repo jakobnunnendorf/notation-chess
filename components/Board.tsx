@@ -5,10 +5,17 @@ import { pieces } from "@/settings";
 import Piece from "./Pieces/Piece";
 import Tiles from "./Tiles";
 
+interface occupiedSquare {
+  id: number;
+  coord: Coord;
+  colour: string;
+}
+
 export default function Board() {
   const [availableTiles, setAvailableTiles] = useState<Coord[]>([]);
   const [activeTile, setActiveTileState] = useState<Coord | null>(null);
   const [activePiece, setActivePiece] = useState<number | null>(null);
+  const [occupiedSquares, setOccupiedSquares] = useState<occupiedSquare[]>([]);
 
   const toggleAvailableTiles = (tiles: Coord[]) =>
     setAvailableTiles(availableTiles.length > 0 ? [] : tiles);
