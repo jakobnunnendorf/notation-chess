@@ -6,13 +6,15 @@ export default function Tiles({
   setActivePiece,
   availableTiles,
   activePiece,
+  occupiedSquares,
 }: {
   setActiveTile: (coord: Coord) => void;
   setActivePiece: (piece: number | null) => void;
   availableTiles: Coord[];
   activePiece: number | null;
+  occupiedSquares: OccupiedSquare[];
 }) {
-  const tiles = Array(8).fill(Array(8).fill(null));
+    const tiles = Array(8).fill(Array(8).fill(null));
   return (
     <div className="absolute grid w-full h-full grid-cols-8 border grid-rows-8">
       {tiles.map((_, y) => {

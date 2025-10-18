@@ -37,6 +37,7 @@ export default function Board() {
         setActivePiece={setActivePiece}
         availableTiles={availableTiles}
         activePiece={activePiece}
+        occupiedSquares={occupiedSquares}
       />
       {pieces.map((piece: PieceMetaData) => {
         const newOccupiedSquare: OccupiedSquare = {
