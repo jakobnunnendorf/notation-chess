@@ -27,7 +27,7 @@ export default function Piece({
 
   useEffect(() => {
     if (
-      activePiece === id &&
+      activePiece?.id === id &&
       activeTile &&
       availableTiles.some(
         (tile) => tile[0] === activeTile[0] && tile[1] === activeTile[1]
@@ -52,7 +52,7 @@ export default function Piece({
           );
           setAvailableTiles(tiles);
         } else setAvailableTiles([]);
-        setActivePiece(activePiece ? null : id);
+        setActivePiece(activePiece ? null : { id, coord: coordinate, colour });
       }}
       className="absolute flex items-center justify-center w-12 h-12 "
       style={{

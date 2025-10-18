@@ -6,8 +6,8 @@ import { pieces } from "@/settings";
 interface GameContextType {
   occupiedSquares: OccupiedSquare[];
   setOccupiedSquares: React.Dispatch<React.SetStateAction<OccupiedSquare[]>>;
-  activePiece: number | null;
-  setActivePiece: React.Dispatch<React.SetStateAction<number | null>>;
+  activePiece: OccupiedSquare | null;
+  setActivePiece: React.Dispatch<React.SetStateAction<OccupiedSquare | null>>;
   activeTile: Coord | null;
   setActiveTile: React.Dispatch<React.SetStateAction<Coord | null>>;
   availableTiles: Coord[];
@@ -25,7 +25,7 @@ export default function GameContextProvider({
 }) {
   const [availableTiles, setAvailableTiles] = useState<Coord[]>([]);
   const [activeTile, setActiveTile] = useState<Coord | null>(null);
-  const [activePiece, setActivePiece] = useState<number | null>(null);
+  const [activePiece, setActivePiece] = useState<OccupiedSquare | null>(null);
   const [occupiedSquares, setOccupiedSquares] = useState<OccupiedSquare[]>([]);
 
   useEffect(() => {

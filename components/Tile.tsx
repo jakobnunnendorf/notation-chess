@@ -11,6 +11,7 @@ export default function Tile({
   const { setActiveTile, setActivePiece, availableTiles, activeTile } =
     useGame();
   const [available, setAvailable] = useState<boolean>(false);
+
   useEffect(() => {
     const available = availableTiles.some(
       (tile) => tile[0] === coordinate[0] && tile[1] === coordinate[1]
