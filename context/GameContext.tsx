@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
+import { pieces } from "@/settings";
 
 interface GameContextType {
   occupiedSquares: OccupiedSquare[];
   setOccupiedSquares: React.Dispatch<React.SetStateAction<OccupiedSquare[]>>;
-  activePiece: OccupiedSquare | null;
-  setActivePiece: React.Dispatch<React.SetStateAction<OccupiedSquare | null>>;
+  activePiece: number | null;
+  setActivePiece: React.Dispatch<React.SetStateAction<number | null>>;
   activeTile: Coord | null;
   setActiveTile: React.Dispatch<React.SetStateAction<Coord | null>>;
   availableTiles: Coord[];
@@ -22,10 +23,22 @@ export default function GameContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [occupiedSquares, setOccupiedSquares] = useState<OccupiedSquare[]>([]);
-  const [activePiece, setActivePiece] = useState<OccupiedSquare | null>(null);
-  const [activeTile, setActiveTile] = useState<Coord | null>(null);
   const [availableTiles, setAvailableTiles] = useState<Coord[]>([]);
+  const [activeTile, setActiveTile] = useState<Coord | null>(null);
+  const [activePiece, setActivePiece] = useState<number | null>(null);
+  const [occupiedSquares, setOccupiedSquares] = useState<OccupiedSquare[]>([]);
+
+  useEffect(() => {
+    const initialOccupiedSquares = pieces.map((piece: PieceMetaData) => {
+      const newOccupiedSquare: OccupiedSquare = {
+        id: piece.id,
+        coord: piece.initialCoord,
+        colour: piece.colour,
+      };
+      return newOccupiedSquare;
+    });
+    setOccupiedSquares(initialOccupiedSquares);
+  }, []);
 
   const value: GameContextType = {
     occupiedSquares,

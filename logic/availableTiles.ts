@@ -1,6 +1,40 @@
+import assert from "assert";
+
 const onBoard = ([x, y]: Coord) => {
   return 0 < x || x < 9 || 0 < y || 9 < y;
 };
+
+export function getAvailableTiles(
+  coord: Coord,
+  pieceType: string,
+  colour?: string
+): Coord[] {
+  let tiles: Coord[];
+  switch (pieceType) {
+    case "pawn":
+      assert(colour !== undefined);
+      tiles = pawnTiles(coord, colour);
+      break;
+    case "king":
+      tiles = kingTiles(coord);
+      break;
+    case "rook":
+      tiles = rookTiles(coord);
+      break;
+    case "bishop":
+      tiles = bishopTiles(coord);
+      break;
+    case "knight":
+      tiles = knightTiles(coord);
+      break;
+    case "queen":
+      tiles = queenTiles(coord);
+      break;
+    default:
+      tiles = [];
+  }
+  return tiles;
+}
 
 export function pawnTiles([x, y]: Coord, colour: string): Coord[] {
   const firstTile: Coord = [x, colour === "white" ? y + 1 : y - 1];

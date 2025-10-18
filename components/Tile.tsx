@@ -1,24 +1,27 @@
-import React from "react";
+import { useGame } from "@/context/GameContext";
+import React, { useState, useEffect } from "react";
 
 export default function Tile({
   even,
-  available,
-  setActiveTile,
-  setActivePiece,
   coordinate,
 }: {
   even: boolean;
-  available: boolean;
-  setActiveTile: (coordinate: [number, number]) => void;
-  activePiece: number | null;
-  setActivePiece: (id: number | null) => void;
   coordinate: [number, number];
 }) {
+  const { setActiveTile, setActivePiece, availableTiles, activeTile } =
+    useGame();
+  const [available, setAvailable] = useState<boolean>(false);
+  useEffect(() => {
+    const available = availableTiles.some(
+      (tile) => tile[0] === coordinate[0] && tile[1] === coordinate[1]
+    );
+    setAvailable(available);
+  }, [availableTiles]);
+
   return (
     <button
       onClick={() => {
-        setActiveTile(coordinate);
-        setActivePiece(null);
+        setActiveTile(activeTile ? null : coordinate);
       }}
       className={`border ${
         available ? "bg-green-200" : even ? "bg-gray-200" : "bg-white"

@@ -1,99 +1,69 @@
 import Image from "next/image";
-import { Component } from "react";
-import {
-  bishopTiles,
-  kingTiles,
-  knightTiles,
-  pawnTiles,
-  queenTiles,
-  rookTiles,
-} from "@/logic/availableTiles";
+import { useState, useEffect } from "react";
+import { getAvailableTiles } from "@/logic/availableTiles";
+import { useGame } from "@/context/GameContext";
 
-interface PieceProps {
+export default function Piece({
+  id,
+  pieceType,
+  colour,
+  initialCoordinate,
+}: {
   id: number;
   pieceType: string;
   colour: string;
-  toggleAvailableTiles: (tiles: [number, number][]) => void;
-  activeTile: [number, number] | null;
-  activePiece: number | null;
-  setActivePiece: (piece: number | null) => void;
-  coordinate: [number, number];
-  occupiedSquares: OccupiedSquare[];
-}
+  initialCoordinate: [number, number];
+}) {
+  const [coordinate, setCoordinate] = useState<Coord>(initialCoordinate);
 
-interface PieceState {
-  alive: boolean;
-  x: number;
-  y: number;
-}
+  const {
+    activePiece,
+    setActivePiece,
+    activeTile,
+    availableTiles,
+    setAvailableTiles,
+  } = useGame();
 
-export default class Piece extends Component<PieceProps, PieceState> {
-  constructor(props: PieceProps) {
-    super(props);
-    this.state = {
-      alive: true,
-      x: props.coordinate[0],
-      y: props.coordinate[1],
-    };
-  }
-
-  toggleAvailableTilesForThisPiece = (coord: Coord) => {
-    if (this.props.pieceType === "pawn")
-      this.props.toggleAvailableTiles(pawnTiles(coord, this.props.colour));
-    else if (this.props.pieceType === "king")
-      this.props.toggleAvailableTiles(kingTiles(coord));
-    else if (this.props.pieceType === "rook")
-      this.props.toggleAvailableTiles(rookTiles(coord));
-    else if (this.props.pieceType === "bishop")
-      this.props.toggleAvailableTiles(bishopTiles(coord));
-    else if (this.props.pieceType === "knight")
-      this.props.toggleAvailableTiles(knightTiles(coord));
-    else if (this.props.pieceType === "queen")
-      this.props.toggleAvailableTiles(queenTiles(coord));
-  };
-
-  componentDidUpdate(prevProps: Readonly<PieceProps>): void {
-    // If this piece is active and the selected activeTile is not
-    // the one this piece is standing on,
-    // update the state to the selcetd tile,
-    // thereby moving the piece to a different row and/or column
+  useEffect(() => {
     if (
-      prevProps.activePiece === this.props.id &&
-      this.props.activeTile &&
-      (this.props.activeTile[0] !== this.state.x ||
-        this.props.activeTile[1] !== this.state.y)
+      activePiece === id &&
+      activeTile &&
+      availableTiles.some(
+        (tile) => tile[0] === activeTile[0] && tile[1] === activeTile[1]
+      ) &&
+      (activeTile[0] !== coordinate[0] || activeTile[1] !== coordinate[1])
     ) {
-      this.setState({
-        x: this.props.activeTile[0],
-        y: this.props.activeTile[1],
-      });
-      this.toggleAvailableTilesForThisPiece(this.props.activeTile);
+      setCoordinate(activeTile);
+      setAvailableTiles([]);
+      setActivePiece(null);
     }
-  }
-  render() {
-    const toggleActivPiece = () => {
-      this.props.setActivePiece(this.props.activePiece ? null : this.props.id);
-    };
+  }, [activePiece, activeTile]);
 
-    return (
-      <button
-        onClick={() => {
-          this.toggleAvailableTilesForThisPiece([this.state.x, this.state.y]);
-          toggleActivPiece();
-        }}
-        className="absolute flex items-center justify-center w-12 h-12 "
-        style={{
-          left: `${(this.state.x - 1) * 48}px`,
-          top: `${(this.state.y - 1) * 48}px`,
-        }}
-      >
-        <Image
-          src={`/pieces/${this.props.colour}_${this.props.pieceType}.png`}
-          alt={`${this.props.colour} ${this.props.pieceType}`}
-          width={25}
-          height={25}
-        />
-      </button>
-    );
-  }
+  return (
+    <button
+      onClick={() => {
+        if (availableTiles.length === 0) {
+          const tiles: Coord[] = getAvailableTiles(
+            coordinate,
+            pieceType,
+            pieceType === "pawn" ? colour : undefined
+          );
+          setAvailableTiles(tiles);
+        } else setAvailableTiles([]);
+        setActivePiece(activePiece ? null : id);
+      }}
+      className="absolute flex items-center justify-center w-12 h-12 "
+      style={{
+        left: `${(coordinate[0] - 1) * 48}px`,
+        top: `${(coordinate[1] - 1) * 48}px`,
+      }}
+    >
+      <Image
+        src={`/pieces/${colour}_${pieceType}.png`}
+        alt={`${colour} ${pieceType}`}
+        width={25}
+        height={25}
+      />
+    </button>
+  );
 }
