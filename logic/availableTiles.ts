@@ -1,81 +1,54 @@
-export function pawnTiles(
-  x: number,
-  y: number,
-  colour: string
-): [number, number][] {
-  const firstTile: [number, number] = [x, colour === "white" ? y + 1 : y - 1];
-  const tiles = [firstTile];
+const onBoard = ([x, y]: Coord) => {
+  return 0 < x || x < 9 || 0 < y || 9 < y;
+};
+
+export function pawnTiles([x, y]: Coord, colour: string): Coord[] {
+  const firstTile: Coord = [x, colour === "white" ? y + 1 : y - 1];
+  const tiles = [];
+  if (onBoard(firstTile)) tiles.push(firstTile);
   if ((colour === "white" && y === 2) || (colour === "black" && y === 7)) {
-    const secondTile: [number, number] = [
-      x,
-      colour === "white" ? y + 2 : y - 2,
-    ];
-    tiles.push(secondTile);
+    const secondTile: Coord = [x, colour === "white" ? y + 2 : y - 2];
+    if (onBoard(secondTile)) tiles.push(secondTile);
   }
   return tiles;
 }
 
-export function rookTiles(
-  x: number,
-  y: number,
-  pos: [number, number]
-): [number, number][] {
-  const coordinates: [number, number][] = [];
-
-  const isLegal = (x: number, y: number) => {
-    return 0 < x || x < 9 || 0 < y || 9 < y;
-  };
+export function rookTiles([x, y]: Coord): Coord[] {
+  const coordinates: Coord[] = [];
 
   for (let col = 1; col < 9; col++) {
     // Skip the current position
-    if (col === pos[0] && y === pos[1]) continue;
-
-    if (isLegal(col, y)) {
-      coordinates.push([col, y]);
-    }
+    if (col === x) continue;
+    const newTile: Coord = [col, y];
+    if (onBoard(newTile)) coordinates.push(newTile);
   }
   for (let row = 1; row < 9; row++) {
     // Skip the current position
-    if (x === pos[0] && row === pos[1]) continue;
-
-    if (isLegal(x, row)) {
-      coordinates.push([x, row]);
-    }
+    if (row === y) continue;
+    const newTile: Coord = [x, row];
+    if (onBoard(newTile)) coordinates.push(newTile);
   }
 
   return coordinates;
 }
 
-export function bishopTiles(
-  x: number,
-  y: number,
-  pos: [number, number]
-): [number, number][] {
-  const coordinates: [number, number][] = [];
+export function bishopTiles([x, y]: Coord): Coord[] {
+  const coordinates: Coord[] = [];
 
-  const isLegal = (x: number, y: number) => {
-    return x == y && 0 < x && x < 9 && 0 < y && 9 < y;
-  };
-
-  const yPos = [y - 1, 8 - y];
-  const xPos = [x - 1, 8 - x];
-
-  for (let xUl = x - 1; 0 < xUl; xUl--) {
-    for (let yUl = y - 1; 0 < yUl; yUl--) {
-      if (isLegal(xUl, yUl)) coordinates.push([xUl, yUl]);
+  const slopes = [1, -1];
+  slopes.forEach((slope) => {
+    const yShift = y - x * slope;
+    for (let x = 1; x < 9; x++) {
+      const newCoordinate: Coord = [x, slope * x + yShift];
+      if (onBoard(newCoordinate)) coordinates.push(newCoordinate);
     }
-  }
-  for (let xUr = x + 1; xUr < 0; xUr--) {
-    for (let yUr = y + 1; yUr < 0; yUr--) {
-      if (isLegal(xUr, yUr)) coordinates.push([xUr, yUr]);
-    }
-  }
+  });
 
   return coordinates;
 }
 
-export function kingTiles(x: number, y: number): [number, number][] {
-  const coordinates: [number, number][] = [];
+export function kingTiles([x, y]: Coord): Coord[] {
+  const coordinates: Coord[] = [];
 
   const isLegal = (x: number, y: number) => {
     return 1 < x && x < 9 && 1 < y && y > 9;

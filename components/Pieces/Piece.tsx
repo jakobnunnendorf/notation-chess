@@ -34,19 +34,15 @@ export default class Piece extends Component<PieceProps, PieceState> {
     };
   }
 
-  toggleAvailableTilesForThisPiece = (x: number, y: number) => {
+  toggleAvailableTilesForThisPiece = (coord: Coord) => {
     if (this.props.type === "pawn")
-      this.props.toggleAvailableTiles(pawnTiles(x, y, this.props.color));
+      this.props.toggleAvailableTiles(pawnTiles(coord, this.props.color));
     else if (this.props.type === "king")
-      this.props.toggleAvailableTiles(kingTiles(x, y));
+      this.props.toggleAvailableTiles(kingTiles(coord));
     else if (this.props.type === "rook")
-      this.props.toggleAvailableTiles(
-        rookTiles(x, y, [this.state.x, this.state.y])
-      );
+      this.props.toggleAvailableTiles(rookTiles(coord));
     else if (this.props.type === "bishop")
-      this.props.toggleAvailableTiles(
-        bishopTiles(x, y, [this.state.x, this.state.y])
-      );
+      this.props.toggleAvailableTiles(bishopTiles(coord));
   };
 
   componentDidUpdate(prevProps: Readonly<PieceProps>): void {
@@ -64,10 +60,7 @@ export default class Piece extends Component<PieceProps, PieceState> {
         x: this.props.activeTile[0],
         y: this.props.activeTile[1],
       });
-      this.toggleAvailableTilesForThisPiece(
-        this.props.activeTile[0],
-        this.props.activeTile[1]
-      );
+      this.toggleAvailableTilesForThisPiece(this.props.activeTile);
     }
   }
   render() {
@@ -78,7 +71,7 @@ export default class Piece extends Component<PieceProps, PieceState> {
     return (
       <button
         onClick={() => {
-          this.toggleAvailableTilesForThisPiece(this.state.x, this.state.y);
+          this.toggleAvailableTilesForThisPiece([this.state.x, this.state.y]);
           toggleActivPiece();
         }}
         className="absolute flex items-center justify-center w-12 h-12 "
