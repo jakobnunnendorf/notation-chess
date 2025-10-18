@@ -21,7 +21,7 @@ colours.forEach((colour) => {
               : startingRow - 1
             : startingRow;
         pieces.push({
-          type: piece,
+          pieceType: piece,
           colour,
           id: pieces.length,
           initialCoord: [col, row],

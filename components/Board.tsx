@@ -40,7 +40,7 @@ export default function Board() {
         <Piece
           key={piece.id}
           id={piece.id}
-          type={piece.type}
+          pieceType={piece.pieceType}
           colour={piece.colour}
           coordinate={piece.initialCoord}
           setActivePiece={setActivePiece}

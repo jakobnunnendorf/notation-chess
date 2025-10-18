@@ -11,7 +11,7 @@ import {
 
 interface PieceProps {
   id: number;
-  type: string;
+  pieceType: string;
   colour: string;
   toggleAvailableTiles: (tiles: [number, number][]) => void;
   activeTile: [number, number] | null;
@@ -37,17 +37,17 @@ export default class Piece extends Component<PieceProps, PieceState> {
   }
 
   toggleAvailableTilesForThisPiece = (coord: Coord) => {
-    if (this.props.type === "pawn")
+    if (this.props.pieceType === "pawn")
       this.props.toggleAvailableTiles(pawnTiles(coord, this.props.colour));
-    else if (this.props.type === "king")
+    else if (this.props.pieceType === "king")
       this.props.toggleAvailableTiles(kingTiles(coord));
-    else if (this.props.type === "rook")
+    else if (this.props.pieceType === "rook")
       this.props.toggleAvailableTiles(rookTiles(coord));
-    else if (this.props.type === "bishop")
+    else if (this.props.pieceType === "bishop")
       this.props.toggleAvailableTiles(bishopTiles(coord));
-    else if (this.props.type === "knight")
+    else if (this.props.pieceType === "knight")
       this.props.toggleAvailableTiles(knightTiles(coord));
-    else if (this.props.type === "queen")
+    else if (this.props.pieceType === "queen")
       this.props.toggleAvailableTiles(queenTiles(coord));
   };
 
@@ -87,8 +87,8 @@ export default class Piece extends Component<PieceProps, PieceState> {
         }}
       >
         <Image
-          src={`/pieces/${this.props.colour}_${this.props.type}.png`}
-          alt={`${this.props.colour} ${this.props.type}`}
+          src={`/pieces/${this.props.colour}_${this.props.pieceType}.png`}
+          alt={`${this.props.colour} ${this.props.pieceType}`}
           width={25}
           height={25}
         />
