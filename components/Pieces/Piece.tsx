@@ -24,7 +24,7 @@ export default function Piece({
     availableTiles,
     setAvailableTiles,
     occupiedSquares,
-    setOccupiedSquares,
+    setPiecesMetaData,
   } = useGame();
 
   useEffect(() => {
@@ -40,8 +40,14 @@ export default function Piece({
       onClick={() => {
         const occupier = findOccupier(occupiedSquares, coordinate);
         if (activePiece && occupier && activePiece.id! !== occupier.id) {
-          setOccupiedSquares(
-            movePiece(occupiedSquares, activePiece.id, coordinate, colour)
+          setPiecesMetaData(
+            movePiece(
+              pieceType,
+              occupiedSquares,
+              activePiece.id,
+              coordinate,
+              colour
+            )
           );
         } else if (availableTiles.length === 0) {
           const tiles: Coord[] = getAvailableTiles(
@@ -52,7 +58,9 @@ export default function Piece({
           );
           setAvailableTiles(tiles);
         } else setAvailableTiles([]);
-        setActivePiece(activePiece ? null : { id, coord: coordinate, colour });
+        setActivePiece(
+          activePiece ? null : { pieceType, id, coord: coordinate, colour }
+        );
       }}
       className="absolute flex items-center justify-center w-12 h-12 "
       style={{

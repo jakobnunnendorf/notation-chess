@@ -24,7 +24,7 @@ colours.forEach((colour) => {
           pieceType: piece,
           colour,
           id: pieces.length,
-          initialCoord: [col, row],
+          coord: [col, row],
         });
       }
     );

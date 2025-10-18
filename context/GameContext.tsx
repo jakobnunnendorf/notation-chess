@@ -4,10 +4,10 @@ import React, { useState, createContext, useContext, useEffect } from "react";
 import { pieces } from "@/settings";
 
 interface GameContextType {
-  occupiedSquares: OccupiedSquare[];
-  setOccupiedSquares: React.Dispatch<React.SetStateAction<OccupiedSquare[]>>;
-  activePiece: OccupiedSquare | null;
-  setActivePiece: React.Dispatch<React.SetStateAction<OccupiedSquare | null>>;
+  occupiedSquares: PieceMetaData[];
+  setPiecesMetaData: React.Dispatch<React.SetStateAction<PieceMetaData[]>>;
+  activePiece: PieceMetaData | null;
+  setActivePiece: React.Dispatch<React.SetStateAction<PieceMetaData | null>>;
   activeTile: Coord | null;
   setActiveTile: React.Dispatch<React.SetStateAction<Coord | null>>;
   availableTiles: Coord[];
@@ -25,19 +25,20 @@ export default function GameContextProvider({
 }) {
   const [availableTiles, setAvailableTiles] = useState<Coord[]>([]);
   const [activeTile, setActiveTile] = useState<Coord | null>(null);
-  const [activePiece, setActivePiece] = useState<OccupiedSquare | null>(null);
-  const [occupiedSquares, setOccupiedSquares] = useState<OccupiedSquare[]>([]);
+  const [activePiece, setActivePiece] = useState<PieceMetaData | null>(null);
+  const [occupiedSquares, setPiecesMetaData] = useState<PieceMetaData[]>([]);
 
   useEffect(() => {
-    const initialOccupiedSquares = pieces.map((piece: PieceMetaData) => {
-      const newOccupiedSquare: OccupiedSquare = {
+    const initialPiecesMetaData = pieces.map((piece: PieceMetaData) => {
+      const newPieceMetaData: PieceMetaData = {
+        pieceType: piece.pieceType,
         id: piece.id,
-        coord: piece.initialCoord,
+        coord: piece.coord,
         colour: piece.colour,
       };
-      return newOccupiedSquare;
+      return newPieceMetaData;
     });
-    setOccupiedSquares(initialOccupiedSquares);
+    setPiecesMetaData(initialPiecesMetaData);
   }, []);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function GameContextProvider({
 
   const value: GameContextType = {
     occupiedSquares,
-    setOccupiedSquares,
+    setPiecesMetaData,
     activePiece,
     setActivePiece,
     activeTile,

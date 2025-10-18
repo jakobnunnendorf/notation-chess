@@ -15,7 +15,7 @@ export default function Board() {
           id={piece.id}
           pieceType={piece.pieceType}
           colour={piece.colour}
-          initialCoordinate={piece.initialCoord}
+          initialCoordinate={piece.coord}
         />
       ))}
     </div>

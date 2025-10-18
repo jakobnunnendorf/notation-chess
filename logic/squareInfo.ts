@@ -1,7 +1,7 @@
 export function findOccupier(
-  occupiedSquares: OccupiedSquare[],
+  occupiedSquares: PieceMetaData[],
   coordinate: Coord
-): OccupiedSquare | undefined {
+): PieceMetaData | undefined {
   const occupier = occupiedSquares.find(
     (square) =>
       square.coord[0] === coordinate[0] && square.coord[1] === coordinate[1]
@@ -19,8 +19,8 @@ export function isTileAvailable(
 }
 
 export function tileIsOccupiedByEnemy(
-  occupier: OccupiedSquare | undefined,
-  activePiece: OccupiedSquare | null
+  occupier: PieceMetaData | undefined,
+  activePiece: PieceMetaData | null
 ): boolean {
   if (!activePiece || !occupier) return false;
   return occupier.colour !== activePiece.colour;

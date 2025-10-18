@@ -2,7 +2,7 @@ import assert from "assert";
 import { findOccupier } from "./squareInfo";
 
 export function shouldThisPieceMove(
-  activePiece: OccupiedSquare | null,
+  activePiece: PieceMetaData | null,
   id: number,
   activeTile: Coord | null,
   availableTiles: Coord[],
@@ -19,18 +19,19 @@ export function shouldThisPieceMove(
 }
 
 export function movePiece(
-  occupiedSquares: OccupiedSquare[],
+  pieceType: string,
+  occupiedSquares: PieceMetaData[],
   id: number,
   newTile: Coord,
   colour: string
-): OccupiedSquare[] {
+): PieceMetaData[] {
   return [
     ...occupiedSquares.filter(
       (square) =>
         !(square.coord[0] === newTile[0] && square.coord[1] === newTile[1]) &&
         square.id !== id
     ),
-    { id, coord: newTile, colour },
+    { pieceType: pieceType, id, coord: newTile, colour },
   ];
 }
 
@@ -39,7 +40,7 @@ const onBoard = ([x, y]: Coord) => {
 };
 
 export function getAvailableTiles(
-  occupiedSquares: OccupiedSquare[],
+  occupiedSquares: PieceMetaData[],
   coord: Coord,
   pieceType: string,
   colour: string
@@ -80,7 +81,7 @@ export function getAvailableTiles(
 }
 
 const hasEnemyPiece = (
-  occupiedSquares: OccupiedSquare[],
+  occupiedSquares: PieceMetaData[],
   [x, y]: Coord,
   colour: string
 ) => {
@@ -89,7 +90,7 @@ const hasEnemyPiece = (
   return occupier.colour !== colour;
 };
 const hasFriend = (
-  occupiedSquares: OccupiedSquare[],
+  occupiedSquares: PieceMetaData[],
   [x, y]: Coord,
   colour: string
 ) => {
@@ -101,7 +102,7 @@ const hasFriend = (
 export function pawnTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: OccupiedSquare[]
+  occupiedSquares: PieceMetaData[]
 ): Coord[] {
   const firstTile: Coord = [x, colour === "white" ? y + 1 : y - 1];
   const tiles: Coord[] = [];
@@ -126,7 +127,7 @@ export function pawnTiles(
 export function rookTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: OccupiedSquare[]
+  occupiedSquares: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
   if (x < 8) {
@@ -168,7 +169,7 @@ export function rookTiles(
 export function bishopTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: OccupiedSquare[]
+  occupiedSquares: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
 
@@ -234,7 +235,7 @@ export function kingTiles([x, y]: Coord): Coord[] {
 export function queenTiles(
   [x, y]: Coord,
   colour: string,
-  occupiedSquares: OccupiedSquare[]
+  occupiedSquares: PieceMetaData[]
 ): Coord[] {
   const coordinates: Coord[] = [];
   coordinates.push(...rookTiles([x, y], colour, occupiedSquares));

@@ -20,7 +20,7 @@ export default function Tile({
     availableTiles,
     activeTile,
     occupiedSquares,
-    setOccupiedSquares,
+    setPiecesMetaData,
     activePiece,
     setAvailableTiles,
   } = useGame();
@@ -40,8 +40,9 @@ export default function Tile({
     <button
       onClick={() => {
         if (activePiece && available) {
-          setOccupiedSquares(
+          setPiecesMetaData(
             movePiece(
+              activePiece.pieceType,
               occupiedSquares,
               activePiece.id,
               coordinate,
