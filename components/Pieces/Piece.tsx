@@ -12,7 +12,7 @@ import {
 interface PieceProps {
   id: number;
   type: string;
-  color: string;
+  colour: string;
   toggleAvailableTiles: (tiles: [number, number][]) => void;
   activeTile: [number, number] | null;
   activePiece: number | null;
@@ -38,7 +38,7 @@ export default class Piece extends Component<PieceProps, PieceState> {
 
   toggleAvailableTilesForThisPiece = (coord: Coord) => {
     if (this.props.type === "pawn")
-      this.props.toggleAvailableTiles(pawnTiles(coord, this.props.color));
+      this.props.toggleAvailableTiles(pawnTiles(coord, this.props.colour));
     else if (this.props.type === "king")
       this.props.toggleAvailableTiles(kingTiles(coord));
     else if (this.props.type === "rook")
@@ -87,8 +87,8 @@ export default class Piece extends Component<PieceProps, PieceState> {
         }}
       >
         <Image
-          src={`/pieces/${this.props.color}_${this.props.type}.png`}
-          alt={`${this.props.color} ${this.props.type}`}
+          src={`/pieces/${this.props.colour}_${this.props.type}.png`}
+          alt={`${this.props.colour} ${this.props.type}`}
           width={25}
           height={25}
         />
