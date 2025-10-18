@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getAvailableTiles } from "@/logic/availableTiles";
 import { useGame } from "@/context/GameContext";
+import { findOccupier } from "@/logic/squareInfo";
 
 export default function Piece({
   id,
@@ -60,11 +61,7 @@ export default function Piece({
   return alive ? (
     <button
       onClick={() => {
-        const occupier = occupiedSquares.find(
-          (square) =>
-            square.coord[0] === coordinate[0] &&
-            square.coord[1] === coordinate[1]
-        );
+        const occupier = findOccupier(occupiedSquares, coordinate);
         if (activePiece && occupier && activePiece?.id! !== occupier?.id) {
           setOccupiedSquares(
             occupiedSquares.filter((square) => square.id !== occupier?.id)

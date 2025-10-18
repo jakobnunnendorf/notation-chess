@@ -1,4 +1,5 @@
 import { useGame } from "@/context/GameContext";
+import { findOccupier } from "@/logic/squareInfo";
 import React, { useState, useEffect } from "react";
 
 export default function Tile({
@@ -25,10 +26,7 @@ export default function Tile({
     );
     setAvailable(available);
 
-    const occupier = occupiedSquares.find(
-      (square) =>
-        square.coord[0] === coordinate[0] && square.coord[1] === coordinate[1]
-    );
+    const occupier = findOccupier(occupiedSquares, coordinate);
     if (!occupier || !available) return;
     const occupierIsEnemy =
       occupier && activePiece && occupier?.colour !== activePiece?.colour;
