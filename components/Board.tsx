@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Tile from "./Tile";
 import Piece from "./Pieces/Piece";
 
