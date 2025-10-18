@@ -1,10 +1,12 @@
 import Board from "@/components/Board";
-import Image from "next/image";
+import GameContextProvider, { GameContext } from "@/context/GameContext";
 
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center h-screen">
-      <Board />
+      <GameContextProvider>
+        <Board />
+      </GameContextProvider>
     </main>
   );
 }
