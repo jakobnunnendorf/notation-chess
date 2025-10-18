@@ -1,23 +1,6 @@
 import assert from "assert";
 import { findOccupier } from "./squareInfo";
 
-export function shouldThisPieceMove(
-  activePiece: PieceMetaData | null,
-  id: number,
-  activeTile: Coord | null,
-  availableTiles: Coord[],
-  coordinate: Coord
-): boolean {
-  if (!activeTile) return false;
-  return (
-    activePiece?.id === id &&
-    availableTiles.some(
-      (tile) => tile[0] === activeTile[0] && tile[1] === activeTile[1]
-    ) &&
-    (activeTile[0] !== coordinate[0] || activeTile[1] !== coordinate[1])
-  );
-}
-
 export function movePiece(
   pieceType: string,
   occupiedSquares: PieceMetaData[],
