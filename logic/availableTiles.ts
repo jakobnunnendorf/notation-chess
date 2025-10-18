@@ -46,11 +46,39 @@ export function rookTiles(
   return coordinates;
 }
 
+export function bishopTiles(
+  x: number,
+  y: number,
+  pos: [number, number]
+): [number, number][] {
+  const coordinates: [number, number][] = [];
+
+  const isLegal = (x: number, y: number) => {
+    return x == y && 0 < x && x < 9 && 0 < y && 9 < y;
+  };
+
+  const yPos = [y - 1, 8 - y];
+  const xPos = [x - 1, 8 - x];
+
+  for (let xUl = x - 1; 0 < xUl; xUl--) {
+    for (let yUl = y - 1; 0 < yUl; yUl--) {
+      if (isLegal(xUl, yUl)) coordinates.push([xUl, yUl]);
+    }
+  }
+  for (let xUr = x + 1; xUr < 0; xUr--) {
+    for (let yUr = y + 1; yUr < 0; yUr--) {
+      if (isLegal(xUr, yUr)) coordinates.push([xUr, yUr]);
+    }
+  }
+
+  return coordinates;
+}
+
 export function kingTiles(x: number, y: number): [number, number][] {
   const coordinates: [number, number][] = [];
 
   const isLegal = (x: number, y: number) => {
-    return 1 < x || x < 9 || 1 < y || y > 9;
+    return 1 < x && x < 9 && 1 < y && y > 9;
   };
 
   for (let row = -1; row < 2; row++) {

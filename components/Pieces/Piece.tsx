@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { Component } from "react";
-import { kingTiles, pawnTiles, rookTiles } from "@/logic/availableTiles";
+import {
+  bishopTiles,
+  kingTiles,
+  pawnTiles,
+  rookTiles,
+} from "@/logic/availableTiles";
 
 interface PieceProps {
   id: number;
@@ -37,6 +42,10 @@ export default class Piece extends Component<PieceProps, PieceState> {
     else if (this.props.type === "rook")
       this.props.toggleAvailableTiles(
         rookTiles(x, y, [this.state.x, this.state.y])
+      );
+    else if (this.props.type === "bishop")
+      this.props.toggleAvailableTiles(
+        bishopTiles(x, y, [this.state.x, this.state.y])
       );
   };
 
