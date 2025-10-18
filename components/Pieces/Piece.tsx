@@ -18,6 +18,7 @@ interface PieceProps {
   activePiece: number | null;
   setActivePiece: (piece: number | null) => void;
   coordinate: [number, number];
+  occupiedSquares: OccupiedSquare[];
 }
 
 interface PieceState {
