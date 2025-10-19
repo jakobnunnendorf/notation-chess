@@ -2,6 +2,7 @@
 
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { pieces } from "@/settings";
+import { getAvailableTiles } from "@/logic/movement";
 
 interface GameContextType {
   piecesMetaData: PieceMetaData[];
@@ -44,10 +45,17 @@ export default function GameContextProvider({
     setPiecesMetaData(initialPiecesMetaData);
   }, []);
 
-  useEffect(() => {}, [boardSide]);
-
   useEffect(() => {
-    if (activePiece === null) setAvailableTiles([]);
+    if (!activePiece) setAvailableTiles([]);
+    else {
+      const tiles: Coord[] = getAvailableTiles(
+        piecesMetaData,
+        activePiece.coord,
+        activePiece.pieceType,
+        activePiece.colour
+      );
+      setAvailableTiles(tiles);
+    }
   }, [activePiece]);
 
   const value: GameContextType = {

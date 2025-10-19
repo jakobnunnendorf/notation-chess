@@ -9,13 +9,28 @@ export function movePiece(
   colour: string
 ): PieceMetaData[] {
   return [
-    ...piecesMetaData.filter(
-      (square) =>
-        !(square.coord[0] === newTile[0] && square.coord[1] === newTile[1]) &&
-        square.id !== id
-    ),
-    { pieceType: pieceType, id, coord: newTile, colour },
+    ...piecesMetaData.filter((square) => square.id !== id),
+    { pieceType, id, coord: newTile, colour },
   ];
+}
+
+export function capturePiece(
+  piecesMetaData: PieceMetaData[],
+  attacker: PieceMetaData,
+  target: PieceMetaData
+): PieceMetaData[] {
+  const targetGone = piecesMetaData.filter(
+    (piece) => piece.id !== target.id && piece.id !== attacker.id
+  );
+  const newAttacker = {
+    ...attacker,
+    coord: target.coord,
+  };
+  return [...targetGone, newAttacker];
+}
+
+export function equalCoord(coord1: Coord, coord2: Coord): boolean {
+  return coord1[0] === coord2[0] && coord1[1] === coord2[1];
 }
 
 const onBoard = ([x, y]: Coord) => {
