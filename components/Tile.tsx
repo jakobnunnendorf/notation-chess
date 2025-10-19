@@ -15,10 +15,8 @@ export default function Tile({
   coordinate: [number, number];
 }) {
   const {
-    setActiveTile,
     setActivePiece,
     availableTiles,
-    activeTile,
     piecesMetaData,
     setPiecesMetaData,
     activePiece,
@@ -53,7 +51,7 @@ export default function Tile({
         setAvailableTiles([]);
         setActivePiece(null);
       }}
-      className={`border ${
+      className={`relative border ${
         occupiedByEnemy
           ? "bg-red-200"
           : available
@@ -62,6 +60,20 @@ export default function Tile({
           ? "bg-gray-200"
           : "bg-white"
       } h-12 w-12`}
-    ></button>
+    >
+      {/* Left side: show rank numbers (8..1) only on the first column */}
+      {coordinate[0] === 1 ? (
+        <span className="absolute left-0 top-0 px-1 text-xs select-none">
+          {9 - coordinate[1]}
+        </span>
+      ) : null}
+
+      {/* Bottom side: show file letters (a..h) only on the last row */}
+      {coordinate[1] === 8 ? (
+        <span className="absolute bottom-0 right-0 px-1 text-xs select-none">
+          {['a','b','c','d','e','f','g','h'].reverse()[coordinate[0] - 1]}
+        </span>
+      ) : null}
+    </button>
   );
 }

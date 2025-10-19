@@ -12,6 +12,8 @@ interface GameContextType {
   setActiveTile: React.Dispatch<React.SetStateAction<Coord | null>>;
   availableTiles: Coord[];
   setAvailableTiles: React.Dispatch<React.SetStateAction<Coord[]>>;
+  boardSide: "black"|"white"
+  setBoardSide:(colour:"black"|"white")=>void
 }
 
 export const GameContext = createContext<GameContextType | undefined>(
@@ -27,6 +29,7 @@ export default function GameContextProvider({
   const [activeTile, setActiveTile] = useState<Coord | null>(null);
   const [activePiece, setActivePiece] = useState<PieceMetaData | null>(null);
   const [piecesMetaData, setPiecesMetaData] = useState<PieceMetaData[]>([]);
+  const [boardSide, setBoardSide]=useState<"black"|"white">("white")
 
   useEffect(() => {
     const initialPiecesMetaData = pieces.map((piece: PieceMetaData) => {
@@ -41,6 +44,9 @@ export default function GameContextProvider({
     setPiecesMetaData(initialPiecesMetaData);
   }, []);
 
+  useEffect(()=>{
+  },[boardSide])
+
   useEffect(() => {
     if (activePiece === null) setAvailableTiles([]);
   }, [activePiece]);
@@ -54,6 +60,8 @@ export default function GameContextProvider({
     setActiveTile,
     availableTiles,
     setAvailableTiles,
+    boardSide,
+    setBoardSide
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
