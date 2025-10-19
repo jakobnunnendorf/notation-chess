@@ -63,15 +63,19 @@ export default function Tile({
     >
       {/* Left side: show rank numbers (8..1) only on the first column */}
       {coordinate[0] === 1 ? (
-        <span className="absolute left-0 top-0 px-1 text-xs select-none">
-          {9 - coordinate[1]}
+        <span className="absolute top-0 left-0 px-1 text-xs select-none">
+          {coordinate[1]}
         </span>
       ) : null}
 
       {/* Bottom side: show file letters (a..h) only on the last row */}
       {coordinate[1] === 8 ? (
         <span className="absolute bottom-0 right-0 px-1 text-xs select-none">
-          {['a','b','c','d','e','f','g','h'].reverse()[coordinate[0] - 1]}
+          {
+            ["a", "b", "c", "d", "e", "f", "g", "h"].reverse()[
+              coordinate[0] - 1
+            ]
+          }
         </span>
       ) : null}
     </button>
