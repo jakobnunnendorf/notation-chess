@@ -25,6 +25,7 @@ export default function Piece({
     setAvailableTiles,
     piecesMetaData,
     setPiecesMetaData,
+    boardSide,
   } = useGame();
 
   useEffect(() => {
@@ -62,7 +63,9 @@ export default function Piece({
           activePiece ? null : { pieceType, id, coord: coordinate, colour }
         );
       }}
-      className="absolute flex items-center justify-center w-12 h-12 "
+      className={`absolute flex items-center justify-center w-12 h-12 ${
+        boardSide === "white" ? "rotate-180" : ""
+      }`}
       style={{
         left: `${(coordinate[0] - 1) * 48}px`,
         top: `${(coordinate[1] - 1) * 48}px`,
