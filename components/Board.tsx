@@ -12,7 +12,7 @@ export default function Board() {
     <div
       className={`relative grid grid-cols-8 ${
         boardSide === "white" ? "rotate-180" : ""
-      } border h-96 w-96 grid-rows-8`}
+      } h-96 w-96 grid-rows-8`}
     >
       <Tiles />
       {pieces.map((piece: PieceMetaData) => (

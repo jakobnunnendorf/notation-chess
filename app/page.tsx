@@ -5,12 +5,13 @@ import Flip from "@/components/Flip";
 
 export default function Home() {
   return (
-    <main className="flex items-center justify-center flex-col h-screen">
+    <main className="flex flex-col items-center justify-center h-screen">
       <GameContextProvider>
-        <Flip/>
-        <div className="flex">
+        <Flip />
+        <div className="flex border-2">
           <ProgressBar />
-        <Board /></div>
+          <Board />
+        </div>
       </GameContextProvider>
     </main>
   );

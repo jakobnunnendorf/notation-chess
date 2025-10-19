@@ -26,7 +26,7 @@ export default function ProgressBar() {
     setProgress(progress);
   }, [piecesMetaData]);
   return (
-    <div className="flex items-end w-8 border h-96">
+    <div className="flex items-end w-8 border-r-2 h-96">
       <BlackProgress progress={progress} />
     </div>
   );
