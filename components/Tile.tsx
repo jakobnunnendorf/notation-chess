@@ -17,13 +17,20 @@ export default function Tile({
     setPiecesMetaData,
     activePiece,
     boardSide,
+    turn,
+    toggleTurn,
   } = useGame();
   const occupier = findOccupier(piecesMetaData, coordinate);
   const available = isTileAvailable(availableTiles, coordinate);
   return (
     <button
       onClick={() => {
-        if (activePiece && !occupier && available) {
+        if (
+          activePiece &&
+          !occupier &&
+          available &&
+          turn === activePiece.colour
+        ) {
           const newPosition = movePiece(
             activePiece.pieceType,
             piecesMetaData,
@@ -32,6 +39,7 @@ export default function Tile({
             activePiece.colour
           );
           setPiecesMetaData(newPosition);
+          toggleTurn();
         }
         setActivePiece(null);
       }}

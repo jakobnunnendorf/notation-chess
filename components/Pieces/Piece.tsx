@@ -19,7 +19,8 @@ export default function Piece({
     activePiece,
     setActivePiece,
     availableTiles,
-    setAvailableTiles,
+    turn,
+    toggleTurn,
     piecesMetaData,
     setPiecesMetaData,
     boardSide,
@@ -34,8 +35,8 @@ export default function Piece({
           coord: coordinate,
           pieceType,
         };
-        if (!activePiece) setActivePiece(thisPiece);
-        else {
+        if (!activePiece && turn === colour) setActivePiece(thisPiece);
+        else if (activePiece) {
           if (activePiece.id === id) setActivePiece(null);
           else {
             // If same colour, just change active piece to this one
@@ -53,6 +54,7 @@ export default function Piece({
                 );
                 setPiecesMetaData(newPosition);
                 setActivePiece(null);
+                toggleTurn();
               }
             }
             // Active piece is enemy but this tile is not available

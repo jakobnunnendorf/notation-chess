@@ -15,6 +15,8 @@ interface GameContextType {
   setAvailableTiles: React.Dispatch<React.SetStateAction<Coord[]>>;
   boardSide: "black" | "white";
   setBoardSide: (colour: "black" | "white") => void;
+  turn: "black" | "white";
+  toggleTurn: () => void;
 }
 
 export const GameContext = createContext<GameContextType | undefined>(
@@ -31,6 +33,7 @@ export default function GameContextProvider({
   const [activePiece, setActivePiece] = useState<PieceMetaData | null>(null);
   const [piecesMetaData, setPiecesMetaData] = useState<PieceMetaData[]>([]);
   const [boardSide, setBoardSide] = useState<"black" | "white">("white");
+  const [turn, setTurn] = useState<"black" | "white">("white");
 
   useEffect(() => {
     const initialPiecesMetaData = pieces.map((piece: PieceMetaData) => {
@@ -58,6 +61,10 @@ export default function GameContextProvider({
     }
   }, [activePiece]);
 
+  const toggleTurn = () => {
+    setTurn((prev) => (prev === "white" ? "black" : "white"));
+  };
+
   const value: GameContextType = {
     piecesMetaData,
     setPiecesMetaData,
@@ -69,6 +76,8 @@ export default function GameContextProvider({
     setAvailableTiles,
     boardSide,
     setBoardSide,
+    turn,
+    toggleTurn,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
