@@ -2,7 +2,7 @@
 
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { pieces } from "@/settings";
-import { getAvailableTiles, isMate } from "@/logic/movement";
+import { getAvailableTiles, isCheckMate } from "@/logic/movement";
 
 interface GameContextType {
   piecesMetaData: PieceMetaData[];
@@ -64,7 +64,7 @@ export default function GameContextProvider({
   }, [activePiece]);
 
   useEffect(() => {
-    if (isMate(piecesMetaData, turn))
+    if (isCheckMate(piecesMetaData, turn))
       setWinner(turn === "white" ? "black" : "white");
   }, [turn]);
 
