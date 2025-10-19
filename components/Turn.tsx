@@ -1,9 +1,12 @@
 "use client";
 import { useGame } from "@/context/GameContext";
-import React from "react";
 
 export default function Turn() {
-  const { turn } = useGame();
+  const { turn, winner } = useGame();
 
-  return <div>{turn.charAt(0).toUpperCase() + turn.slice(1)} to play</div>;
+  const toUpper = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  return winner ? `${toUpper(winner)} won!!!` : `${toUpper(turn)} to play`;
 }

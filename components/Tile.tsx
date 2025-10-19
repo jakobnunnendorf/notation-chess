@@ -19,29 +19,32 @@ export default function Tile({
     boardSide,
     turn,
     toggleTurn,
+    winner,
   } = useGame();
   const occupier = findOccupier(piecesMetaData, coordinate);
   const available = isTileAvailable(availableTiles, coordinate);
   return (
     <button
       onClick={() => {
-        if (
-          activePiece &&
-          !occupier &&
-          available &&
-          turn === activePiece.colour
-        ) {
-          const newPosition = movePiece(
-            activePiece.pieceType,
-            piecesMetaData,
-            activePiece.id,
-            coordinate,
-            activePiece.colour
-          );
-          setPiecesMetaData(newPosition);
-          toggleTurn();
+        if (!winner) {
+          if (
+            activePiece &&
+            !occupier &&
+            available &&
+            turn === activePiece.colour
+          ) {
+            const newPosition = movePiece(
+              activePiece.pieceType,
+              piecesMetaData,
+              activePiece.id,
+              coordinate,
+              activePiece.colour
+            );
+            setPiecesMetaData(newPosition);
+            toggleTurn();
+          }
+          setActivePiece(null);
         }
-        setActivePiece(null);
       }}
       className={`relative ${
         occupier && occupier.colour !== activePiece?.colour && available

@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { useState } from "react";
-import { getAvailableTiles, capturePiece, equalCoord } from "@/logic/movement";
+import { capturePiece, equalCoord } from "@/logic/movement";
 import { useGame } from "@/context/GameContext";
-import { findOccupier } from "@/logic/squareInfo";
 
 export default function Piece({
   id,
@@ -24,40 +22,46 @@ export default function Piece({
     piecesMetaData,
     setPiecesMetaData,
     boardSide,
+    winner,
   } = useGame();
 
   return (
     <button
       onClick={() => {
-        const thisPiece: PieceMetaData = {
-          id,
-          colour,
-          coord: coordinate,
-          pieceType,
-        };
-        if (!activePiece && turn === colour) setActivePiece(thisPiece);
-        else if (activePiece) {
-          if (activePiece.id === id) setActivePiece(null);
-          else {
-            // If same colour, just change active piece to this one
-            if (activePiece.colour === colour) setActivePiece(thisPiece);
+        if (!winner) {
+          const thisPiece: PieceMetaData = {
+            id,
+            colour,
+            coord: coordinate,
+            pieceType,
+          };
+          if (!activePiece && turn === colour) setActivePiece(thisPiece);
+          else if (activePiece) {
+            if (activePiece.id === id) setActivePiece(null);
             else {
-              // If different colour, check if this field is available for the active piece
-              if (!availableTiles.some((tile) => equalCoord(tile, coordinate)))
-                setActivePiece(null); // If not available deselect active piece
+              // If same colour, just change active piece to this one
+              if (activePiece.colour === colour) setActivePiece(thisPiece);
               else {
-                // if it is available AND active piece is a different piece, capture it
-                const newPosition = capturePiece(
-                  piecesMetaData,
-                  activePiece,
-                  thisPiece
-                );
-                setPiecesMetaData(newPosition);
-                setActivePiece(null);
-                toggleTurn();
+                // If different colour, check if this field is available for the active piece
+                if (
+                  !availableTiles.some((tile) => equalCoord(tile, coordinate))
+                )
+                  setActivePiece(null);
+                // If not available deselect active piece
+                else {
+                  // if it is available AND active piece is a different piece, capture it
+                  const newPosition = capturePiece(
+                    piecesMetaData,
+                    activePiece,
+                    thisPiece
+                  );
+                  setPiecesMetaData(newPosition);
+                  setActivePiece(null);
+                  toggleTurn();
+                }
               }
+              // Active piece is enemy but this tile is not available
             }
-            // Active piece is enemy but this tile is not available
           }
         }
       }}

@@ -14,6 +14,31 @@ export function movePiece(
   ];
 }
 
+export function isMate(piecesMetaData: PieceMetaData[], turn: string): boolean {
+  const king = piecesMetaData.find(
+    (piece) => piece.pieceType === "king" && piece.colour === turn
+  );
+  if (!king) return false;
+  const kingSquares = getAvailableTiles(
+    piecesMetaData,
+    king.coord,
+    "king",
+    king.colour
+  );
+  if (kingSquares.length > 0) return false;
+  for (const piece of piecesMetaData.filter((piece) => piece.colour !== turn)) {
+    const attackSquares = getAvailableTiles(
+      piecesMetaData,
+      piece.coord,
+      piece.pieceType,
+      piece.colour
+    );
+    if (attackSquares.some((square) => equalCoord(square, king.coord)))
+      return true;
+  }
+  return false;
+}
+
 export function capturePiece(
   piecesMetaData: PieceMetaData[],
   attacker: PieceMetaData,

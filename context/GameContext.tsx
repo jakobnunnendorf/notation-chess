@@ -2,7 +2,7 @@
 
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { pieces } from "@/settings";
-import { getAvailableTiles } from "@/logic/movement";
+import { getAvailableTiles, isMate } from "@/logic/movement";
 
 interface GameContextType {
   piecesMetaData: PieceMetaData[];
@@ -17,6 +17,7 @@ interface GameContextType {
   setBoardSide: (colour: "black" | "white") => void;
   turn: "black" | "white";
   toggleTurn: () => void;
+  winner: "black" | "white" | null;
 }
 
 export const GameContext = createContext<GameContextType | undefined>(
@@ -34,6 +35,7 @@ export default function GameContextProvider({
   const [piecesMetaData, setPiecesMetaData] = useState<PieceMetaData[]>([]);
   const [boardSide, setBoardSide] = useState<"black" | "white">("white");
   const [turn, setTurn] = useState<"black" | "white">("white");
+  const [winner, setWinner] = useState<"black" | "white" | null>(null);
 
   useEffect(() => {
     const initialPiecesMetaData = pieces.map((piece: PieceMetaData) => {
@@ -61,6 +63,11 @@ export default function GameContextProvider({
     }
   }, [activePiece]);
 
+  useEffect(() => {
+    if (isMate(piecesMetaData, turn))
+      setWinner(turn === "white" ? "black" : "white");
+  }, [turn]);
+
   const toggleTurn = () => {
     setTurn((prev) => (prev === "white" ? "black" : "white"));
   };
@@ -78,6 +85,7 @@ export default function GameContextProvider({
     setBoardSide,
     turn,
     toggleTurn,
+    winner,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
